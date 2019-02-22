@@ -1,3 +1,15 @@
+import { AsyncStorage } from 'react-native';
+
+export let getAccessToken = async () => {
+    let token: any = await AsyncStorage.getItem('token');
+    return token;
+}
+
+export let getUser = async () => {
+    let user: any = await AsyncStorage.getItem('user');
+    return JSON.parse(user);
+}
+
 export const json = async <T = any>(uri: string, method: string = 'GET', body?: {}) => {
 
     let headers: any = {
@@ -20,4 +32,9 @@ export const json = async <T = any>(uri: string, method: string = 'GET', body?: 
         throw e;
     }
 
+};
+
+export const SetAccessToken = async (token: string, user: {} = {userid: undefined, role: 'admin'}) => {
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(user));
 };

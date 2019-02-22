@@ -2,16 +2,18 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import AllBlogs from './screens/AllBlogs';
 import SingleBlog from './screens/SingleBlog';
+import Login from './screens/Login';
 
 const AppNavigator = createStackNavigator(
     {
         // screens
         AllBlogs,
-        SingleBlog
+        SingleBlog,
+        Login
     },
     {
         //generic styling
-        initialRouteName: 'AllBlogs',
+        initialRouteName: 'Login',
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: '#43005B'
