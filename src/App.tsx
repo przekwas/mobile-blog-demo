@@ -1,7 +1,6 @@
 import * as React from 'react';
 import AppContainer from './AppContainer';
 
-
 interface Props { }
 interface State { }
 

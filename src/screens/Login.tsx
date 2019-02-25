@@ -35,11 +35,13 @@ export default class Login extends React.Component<Props, State> {
             if (result) {
                 await SetAccessToken(result.token, { userid: result.userid, role: result.role });
                 let user = await getUser();
-                if(user && user.role === 'admin') {
+                if (user && user.role === 'admin') {
                     this.props.navigation.navigate('AllBlogs');
                 } else {
                     Alert.alert('Invalid Credentials!');
                 }
+            } else {
+                Alert.alert('Invalid Credentials!');
             }
 
         } catch (e) {
