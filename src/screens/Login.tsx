@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
-import { Text, Button, Input } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { json, SetAccessToken, getUser } from '../utils/api';
 
@@ -24,6 +24,13 @@ export default class Login extends React.Component<Props, State> {
         };
     }
 
+    async componentDidMount() {
+        let user = await getUser();
+        if(user && user.role === 'admin') {
+            this.props.navigation.navigate('AllBlogs');
+        }
+    }
+
     async handleLogin() {
         try {
 
@@ -35,11 +42,13 @@ export default class Login extends React.Component<Props, State> {
             if (result) {
                 await SetAccessToken(result.token, { userid: result.userid, role: result.role });
                 let user = await getUser();
-                if(user && user.role === 'admin') {
+                if (user && user.role === 'admin') {
                     this.props.navigation.navigate('AllBlogs');
                 } else {
                     Alert.alert('Invalid Credentials!');
                 }
+            } else {
+                Alert.alert('Invalid Credentials!');
             }
 
         } catch (e) {
