@@ -20,7 +20,6 @@ export default class AuthLoading extends React.Component<Props, State> {
 
     async _accessToken() {
         try {
-            await AsyncStorage.clear();
             let token = await getAccessToken();
             this.props.navigation.navigate(token ? 'App' : 'Auth');
         } catch (e) {
