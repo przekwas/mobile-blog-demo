@@ -8,18 +8,19 @@ import {
 import { getAccessToken } from '../utils/api';
 import { NavigationScreenProps } from 'react-navigation';
 
-interface Props extends NavigationScreenProps { }
-interface State { }
+interface Props extends NavigationScreenProps { };
+interface State { };
 
-export default class AuthLoadingScreen extends React.Component<Props, State> {
+export default class AuthLoading extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.testAccessToken();
+        this._accessToken();
     }
 
-    async testAccessToken() {
+    async _accessToken() {
         try {
+            await AsyncStorage.clear();
             let token = await getAccessToken();
             this.props.navigation.navigate(token ? 'App' : 'Auth');
         } catch (e) {

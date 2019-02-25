@@ -5,6 +5,23 @@ import SingleBlog from './screens/SingleBlog';
 import Login from './screens/Login';
 import AuthLoading from './screens/AuthLoading';
 
+const AuthStack = createStackNavigator(
+    {
+        Login
+    },
+    {
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#0091ea'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold'
+            }
+        }
+    }
+);
+
 const AppStack = createStackNavigator(
     {
         // screens
@@ -12,6 +29,7 @@ const AppStack = createStackNavigator(
         SingleBlog,
     },
     {
+        initialRouteName: 'AllBlogs',
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: '#43005B'
@@ -24,12 +42,6 @@ const AppStack = createStackNavigator(
     }
 );
 
-const AuthStack = createStackNavigator(
-    {
-        Login
-    }
-);
-
 export default createAppContainer(createSwitchNavigator(
     {
         App: AppStack,
@@ -37,6 +49,6 @@ export default createAppContainer(createSwitchNavigator(
         AuthLoading
     },
     {
-        initialRouteName: 'AuthLoading'
+        initialRouteName: 'AuthLoading',
     }
 ));

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
-import { Text, Button, Input } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { json, SetAccessToken, getUser } from '../utils/api';
 
@@ -22,6 +22,13 @@ export default class Login extends React.Component<Props, State> {
             email: '',
             password: ''
         };
+    }
+
+    async componentDidMount() {
+        let user = await getUser();
+        if(user && user.role === 'admin') {
+            this.props.navigation.navigate('AllBlogs');
+        }
     }
 
     async handleLogin() {
