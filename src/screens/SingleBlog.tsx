@@ -13,7 +13,7 @@ interface State {
         body: string,
         firstname: string,
         lastname: string,
-        _created: Date
+        __created: Date
     };
     tags: {
         name: string
@@ -35,7 +35,7 @@ export default class SingleBlog extends React.Component<Props, State> {
                 body: "",
                 firstname: "",
                 lastname: "",
-                _created: new Date()
+                __created: new Date()
             },
             tags: []
         };
@@ -64,12 +64,12 @@ export default class SingleBlog extends React.Component<Props, State> {
     }
 
     render() {
-        const { title, body, firstname, lastname, _created } = this.state.blog;
+        const { title, body, firstname, lastname, __created } = this.state.blog;
         return (
             <View style={styles.container}>
                 <Text h2 style={styles.titleStyle}>{title}</Text>
                 <Text h4 style={styles.authorStyle}>by {firstname} {lastname}</Text>
-                <Text style={styles.dateStyle}>on {moment(_created).format('MMM DD, YYYY')}</Text>
+                <Text style={styles.dateStyle}>on {moment(__created).format('MMM DD, YYYY')}</Text>
                 <View style={styles.tagsContainerStyle}>{this.renderTags()}</View>
                 <View style={styles.bodyContainer}>
                     <Text style={styles.bodyTextStyle}>{body}</Text>
