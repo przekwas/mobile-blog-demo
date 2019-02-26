@@ -23,7 +23,7 @@ interface State {
 export default class SingleBlog extends React.Component<Props, State> {
 
     static navigationOptions: NavigationScreenOptions = {
-        headerTitle: "Blog Details"
+        title: "Blog Details"
     };
 
     constructor(props: Props) {

@@ -20,7 +20,7 @@ interface State {
 export default class AllBlogs extends React.Component<Props, State> {
 
     static navigationOptions: NavigationScreenOptions = {
-        headerTitle: "Blogs"
+        title: "Blogs",
     };
 
     constructor(props: Props) {
