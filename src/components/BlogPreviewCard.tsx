@@ -9,7 +9,7 @@ interface Props extends NavigationInjectedProps {
         body: string,
         firstname: string,
         lastname: string,
-        _created: Date
+        __created: Date
     }
 }
 
