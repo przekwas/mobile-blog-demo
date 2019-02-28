@@ -1,12 +1,19 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { View, StyleSheet, Alert, Picker } from 'react-native';
+import { Input, Button, Text } from 'react-native-elements';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { getUser, json } from '../utils/api';
 
 interface Props extends NavigationInjectedProps { }
 interface State {
     title: string;
     content: string;
+    selectedTag: number;
+    tags: {
+        id: number,
+        name: string,
+        _created: Date
+    }[];
 }
 
 class BlogForm extends React.Component<Props, State> {
@@ -15,12 +22,56 @@ class BlogForm extends React.Component<Props, State> {
         super(props);
         this.state = {
             title: "",
-            content: ""
+            content: "",
+            selectedTag: 0,
+            tags: []
         };
     }
 
+    async componentDidMount() {
+        try {
+            let tags = await json('https://deployed-blog-demo.herokuapp.com/api/tags');
+            this.setState({ tags });
+        } catch (e) {
+            console.log(e);
+            Alert.alert('Error getting tags.')
+        }
+    }
+
+    private saving: boolean = false;
+
     async handleSubmit() {
 
+        if (this.saving) return;
+
+        let newBlog = {
+            title: this.state.title,
+            body: this.state.content,
+            authorid: null
+        };
+
+        try {
+            this.saving = true;
+
+            let { userid } = await getUser();
+            newBlog.authorid = userid;
+
+            let result = await json('https://deployed-blog-demo.herokuapp.com/api/blogs', 'POST', newBlog);
+
+            if (result) {
+                this.setState({
+                    title: "",
+                    content: ""
+                });
+                this.props.navigation.navigate('AllBlogs');
+            }
+
+        } catch (e) {
+            console.log(e);
+            Alert.alert('Error adding blog!');
+        } finally {
+            this.saving = false;
+        }
 
     }
 
@@ -36,6 +87,17 @@ class BlogForm extends React.Component<Props, State> {
                     value={this.state.title}
                     onChangeText={(text) => this.setState({ title: text })}
                 />
+                <View style={styles.containerStyle}>
+                    <Text style={styles.ghettoLabel}>Tag</Text>
+                    <Picker
+                        selectedValue={this.state.selectedTag}
+                        onValueChange={(itemValue) => this.setState({ selectedTag: itemValue })}
+                    >
+                        {this.state.tags.map(tag => (
+                            <Picker.Item key={tag.id} label={`${tag.name}`} value={tag.id} />
+                        ))}
+                    </Picker>
+                </View>
                 <Input
                     label="Content"
                     containerStyle={styles.containerStyle}
@@ -53,7 +115,7 @@ class BlogForm extends React.Component<Props, State> {
                     containerStyle={{ margin: 10 }}
                     buttonStyle={styles.buttonStyle}
                     onPress={() => this.handleSubmit()} />
-            </View>
+            </View >
         );
     }
 }
@@ -77,6 +139,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#AE3CD7',
         borderWidth: 2,
         borderColor: '#43005B'
+    },
+    ghettoLabel: {
+        marginHorizontal: 1,
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#86939e',
+        fontFamily: 'sans-serif'
     }
 });
 
