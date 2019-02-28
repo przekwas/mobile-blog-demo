@@ -47,7 +47,8 @@ class BlogForm extends React.Component<Props, State> {
         let newBlog = {
             title: this.state.title,
             body: this.state.content,
-            authorid: null
+            authorid: null,
+            tagid: this.state.selectedTag
         };
 
         try {
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
         borderColor: '#43005B'
     },
     ghettoLabel: {
-        marginHorizontal: 1,
+        marginHorizontal: 2,
         fontWeight: 'bold',
         fontSize: 16,
         color: '#86939e',
