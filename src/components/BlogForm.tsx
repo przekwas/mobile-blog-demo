@@ -8,12 +8,12 @@ interface Props extends NavigationInjectedProps { }
 interface State {
     title: string;
     content: string;
-    selectedTag: number;
     tags: {
         id: number,
         name: string,
         _created: Date
     }[];
+    selectedTag: number;
 }
 
 class BlogForm extends React.Component<Props, State> {
@@ -23,10 +23,12 @@ class BlogForm extends React.Component<Props, State> {
         this.state = {
             title: "",
             content: "",
-            selectedTag: 0,
-            tags: []
+            tags: [],
+            selectedTag: 0
         };
     }
+
+    private saving: boolean = false;
 
     async componentDidMount() {
         try {
@@ -34,11 +36,9 @@ class BlogForm extends React.Component<Props, State> {
             this.setState({ tags });
         } catch (e) {
             console.log(e);
-            Alert.alert('Error getting tags.')
+            Alert.alert('Error getting tags');
         }
     }
-
-    private saving: boolean = false;
 
     async handleSubmit() {
 
@@ -53,20 +53,18 @@ class BlogForm extends React.Component<Props, State> {
 
         try {
             this.saving = true;
-
             let { userid } = await getUser();
             newBlog.authorid = userid;
-
             let result = await json('https://deployed-blog-demo.herokuapp.com/api/blogs', 'POST', newBlog);
-
             if (result) {
                 this.setState({
                     title: "",
-                    content: ""
+                    content: "",
                 });
                 this.props.navigation.navigate('AllBlogs');
+            } else {
+                Alert.alert('Error adding blog, make sure all fields are filled!');
             }
-
         } catch (e) {
             console.log(e);
             Alert.alert('Error adding blog!');
@@ -89,7 +87,7 @@ class BlogForm extends React.Component<Props, State> {
                     onChangeText={(text) => this.setState({ title: text })}
                 />
                 <View style={styles.containerStyle}>
-                    <Text style={styles.ghettoLabel}>Tag</Text>
+                    <Text style={styles.customLabel}>Tags</Text>
                     <Picker
                         selectedValue={this.state.selectedTag}
                         onValueChange={(itemValue) => this.setState({ selectedTag: itemValue })}
@@ -141,7 +139,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#43005B'
     },
-    ghettoLabel: {
+    customLabel: {
         marginHorizontal: 2,
         fontWeight: 'bold',
         fontSize: 16,
